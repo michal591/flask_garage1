@@ -9,7 +9,7 @@ DELETE
 CART
 """
 
-from flask import Flask, session, redirect, url_for, request
+from flask import Flask, render_template, session, redirect, url_for, request
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -42,8 +42,8 @@ cars = [car1, car2, car3]
 def index():
     if "username" in session:
         username = session["username"]
-        print(f'Logged in as {username} <br><a href="/logout">Logout</a>')
         return f'Logged in as {username} <br><a href="/logout">Logout</a>'
+        
     return 'You are not logged in <br><a href="/login">Login</a>'
 
 
@@ -52,12 +52,7 @@ def login():
     if request.method == "POST":
         session["username"] = request.form["username"]
         return redirect(url_for("index"))
-    return """
-        <form method="post">
-            <p><input type=text name=username>
-            <p><input type=submit value=Login>
-        </form>
-    """
+    return render_template("login.html")
 
 
 @app.route("/logout")
